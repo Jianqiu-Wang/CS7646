@@ -5,12 +5,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-trades_i = 0
+# Create orders df
+trades_df = pd.DataFrame(columns=['Dates', 'Symbol', 'Order', 'Shares'])
 
-def plot_selected(df, columns, start_index, end_index):
-    """Plot the desired columns over index values in the given range."""
-    df = df.ix[start_index:end_index, columns]
-    plot_data(df)
+# Running index of trades_df
+trades_i = 0
 
 def symbol_to_path(symbol, base_dir="data"):
     """Return CSV file path given ticker symbol."""
@@ -125,8 +124,6 @@ def get_portfolio_stats(port_val, daily_rf=0, samples_per_year=252):
     sharpe_ratio = k * np.mean(avg_daily_ret - daily_rf)/std_daily_ret
     return cum_ret, avg_daily_ret, std_daily_ret, sharpe_ratio
 
-def normalize_data(df):
-    return df/df.ix[0,:]
 
 def plot_normalized_data(df, title="Normalized prices", xlabel="Date", ylabel="Normalized price"):
     """Normalize given stock prices and plot for comparison.
@@ -144,16 +141,6 @@ def plot_normalized_data(df, title="Normalized prices", xlabel="Date", ylabel="N
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     plt.show()
-
-def plot_data(df, title='Stock prices'):
-
-    ax = df.plot(title=title)
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Price')
-    #plt.show()
-
-    # Normalize plot
-    #df = df/df[0]
 
 def get_rolling_mean(values, window):
     """Return rolling mean of given values, using specified window size."""
@@ -173,9 +160,10 @@ def get_bollinger_bands(rm, rstd):
     lower_band = rm - 2*rstd
     return upper_band, lower_band
 
-def plot_short_entries_exits(upper_band, rm_IBM, df, trades_df):
+def plot_short_entries_exits(upper_band, rm_IBM, df):
 
     global trades_i
+    global trades_df
 
     find_short_entries = np.pad(np.diff(np.array(df['IBM'] > upper_band).astype(int)),
                                 (1, 0), 'constant', constant_values=(0, ))
@@ -208,11 +196,11 @@ def plot_short_entries_exits(upper_band, rm_IBM, df, trades_df):
                 break
             j += 1
         i += 1
-    return trades_df
 
-def plot_long_entries_exits(lower_band, rm_IBM, df, trades_df):
+def plot_long_entries_exits(lower_band, rm_IBM, df):
 
     global trades_i
+    global trades_df
 
     find_long_entries = np.pad(np.diff(np.array(df['IBM'] > lower_band).astype(int)),
                                 (1, 0), 'constant', constant_values=(0, ))
@@ -245,9 +233,10 @@ def plot_long_entries_exits(lower_band, rm_IBM, df, trades_df):
                 break
             j += 1
         i += 1
-    return trades_df
 
 def test_run():
+
+    global trades_df
 
     start_date = '2007-12-31'
     end_date = '2009-12-31'
@@ -274,13 +263,11 @@ def test_run():
     upper_band.plot(label='Upper band', ax=ax)
     lower_band.plot(label='Lower band', ax=ax)
 
-    trades_df = pd.DataFrame(columns=['Dates', 'Symbol', 'Order', 'Shares'])
-
     # Plot short entries and exits
-    trades_df = plot_short_entries_exits(upper_band, rm_IBM, df, trades_df)
+    plot_short_entries_exits(upper_band, rm_IBM, df)
 
     # Plot long entries and exits
-    trades_df = plot_long_entries_exits(lower_band, rm_IBM, df, trades_df)
+    plot_long_entries_exits(lower_band, rm_IBM, df)
     
     # Sort orders by Date and assign Dates column as the index
     trades_df = trades_df.sort('Dates')

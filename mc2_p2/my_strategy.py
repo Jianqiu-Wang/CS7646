@@ -5,6 +5,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Create orders df
+trades_df = pd.DataFrame(columns=['Dates', 'Symbol', 'Order', 'Shares'])
+
+# Running index of trades_df
 trades_i = 0
 
 def symbol_to_path(symbol, base_dir="data"):
@@ -139,9 +143,10 @@ def plot_normalized_data(df, title="Normalized prices", xlabel="Date", ylabel="N
     ax.set_ylabel(ylabel)
     plt.show()
 
-def plot_short_entries_exits(macd, signalline, df, trades_df):
+def plot_short_entries_exits(macd, signalline, df):
 
     global trades_i
+    global trades_df
 
     find_short_entries_exits = np.pad(np.diff(np.array(macd > signalline).astype(int)),
                                 (1, 0), 'constant', constant_values=(0, ))
@@ -172,11 +177,11 @@ def plot_short_entries_exits(macd, signalline, df, trades_df):
                 break
             j += 1
         i += 1
-    return trades_df
 
-def plot_long_entries_exits(macd, signalline, df, trades_df):
+def plot_long_entries_exits(macd, signalline, df):
 
     global trades_i
+    global trades_df
 
     find_long_entries_exits = np.pad(np.diff(np.array(macd > signalline).astype(int)),
                                (1, 0), 'constant', constant_values=(0, ))
@@ -207,9 +212,9 @@ def plot_long_entries_exits(macd, signalline, df, trades_df):
                 break
             j += 1
         i += 1
-    return trades_df
 
-def MACD(df, trades_df):
+
+def MACD(df):
 
     df['12d_ema'] = pd.ewma(df['IBM'], span=12)
     df['26d_ema'] = pd.ewma(df['IBM'], span=26)
@@ -222,11 +227,13 @@ def MACD(df, trades_df):
     ax.set_xlabel('Date')
     ax.set_ylabel('Normalized vals')
 
-    trades_df = plot_long_entries_exits(df['MACD'], df['MACD_signalline'], df, trades_df)
-    return plot_short_entries_exits(df['MACD'], df['MACD_signalline'], df, trades_df)
+    plot_long_entries_exits(df['MACD'], df['MACD_signalline'], df)
+    plot_short_entries_exits(df['MACD'], df['MACD_signalline'], df)
 
 
 def test_run():
+
+    global trades_df
 
     start_date = '2007-12-31'
     end_date = '2009-12-31'
@@ -237,9 +244,7 @@ def test_run():
 
     df = get_data(symbols, dates)
 
-    trades_df = pd.DataFrame(columns=['Dates', 'Symbol', 'Order', 'Shares'])
-
-    trades_df = MACD(df, trades_df)
+    MACD(df)
 
     start_val = 10000
 
