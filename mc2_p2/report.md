@@ -38,7 +38,7 @@ I used the Moving Average Convergence Divergence(MACD) technical indicator. This
 
 ###Fundamental Portion
 
-IBM as an asset has shown steady growth since the mid 90s. So rather then selling off all long entry stocks at a long exit signal, I decided that I would keep 6 shares with the intention of capitalizing on IBM's growth over 2008. By the end of the year these share's pile up (+6 at each long exit signal) and result in a substantial contribution to the overall portfolio value (assuming the stock grows over the year). I also altered the quantity of shares for short entry/exits and long entry/exits in comparison with part 1. As we've learned, there is no limit to the amount of money you could lose in a short entry, as the stock could theoretically climb to infinity. In a long entry, there's an upper bound to the amount of money you could lose: the stock tanking to $0/share. Since IBM has demonstrated steady growth over the past 25 years, it would seem that you would stand to lose money if you shorted the stock over a longer period of time Keeping this in mind I adjusted the short entry/exit quantities to 50 shares each (down from 100) and the long entry/exit quantities to 100/94 shares respectively.
+IBM as an asset has shown steady growth since the mid 90s. So rather then selling off all long entry stocks at a long exit signal, I decided that I would keep 6 shares with the intention of capitalizing on IBM's growth over 2008. By the end of the year these share's pile up (+6 at each long exit signal) and result in a substantial contribution to the overall portfolio value (assuming the stock grows over the year). I also altered the quantity of shares for short entry/exits and long entry/exits in comparison with part 1. As we've learned, there is no limit to the amount of money you could lose in a short entry, as the stock could theoretically climb to infinity. In a long entry, there's an upper bound to the amount of money you could lose: the stock tanking to $0/share. Since IBM has demonstrated steady growth over the past 25 years, it would seem that you would stand to lose money if you shorted the stock over a longer period of time. Keeping this in mind I adjusted the short entry/exit quantities to 50 shares each (down from 100) and the long entry/exit quantities to 100/94 shares respectively.
 
 ##MACD strategy chart
 
@@ -67,3 +67,6 @@ Average Daily Return of $SPX: -0.000304189525556
 
 Final Portfolio Value: 15129.56
 ```
+##Conclusion
+
+The MACD strategy outperformed the Bollinger Band strategy by about 15%. However, this trading strategy proved to be more volatile as it had a lower Sharpe ratio and higher standard deviation. In this case though, the gamble appears to have paid off

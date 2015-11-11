@@ -75,8 +75,6 @@ def compute_portvals(start_date, end_date, trades_df, start_val):
             shares_val += prices_symbol.ix[i, symbol + ' Shares'] * row[symbol]
         prices_symbol.ix[i, 'Port Val'] = prices_symbol.ix[i, 'Cash'] + shares_val
 
-    print prices_symbol
-
     return prices_symbol.ix[:, 'Port Val']
 
 def get_portfolio_value(prices, allocs, start_val=1):
@@ -216,17 +214,20 @@ def plot_long_entries_exits(macd, signalline, df):
 
 def MACD(df):
 
+    # Compute MACD and signal line
     df['12d_ema'] = pd.ewma(df['IBM'], span=12)
     df['26d_ema'] = pd.ewma(df['IBM'], span=26)
     df['MACD'] = df['12d_ema'] - df['26d_ema']
     df['MACD_signalline'] = pd.rolling_mean(df['MACD'], window=9)
 
+    # Plot MACD and signal line
     ax = df['MACD'].plot(title='MACD', label='MACD')
     df['MACD_signalline'].plot(label='signalline', ax=ax)
     ax.legend(loc="lower right")
     ax.set_xlabel('Date')
     ax.set_ylabel('Normalized vals')
 
+    # Plot long and short entries and exits
     plot_long_entries_exits(df['MACD'], df['MACD_signalline'], df)
     plot_short_entries_exits(df['MACD'], df['MACD_signalline'], df)
 
@@ -244,8 +245,10 @@ def test_run():
 
     df = get_data(symbols, dates)
 
+    # Compute MACD/signal line and long and short entries and exits
     MACD(df)
 
+    # Initial cash
     start_val = 10000
 
     # Process orders
@@ -279,6 +282,7 @@ def test_run():
     print
     print "Final Portfolio Value: {}".format(portvals[-1])
 
+    # View MACD and signal line
     plt.show()
 
     # Plot computed daily portfolio value
