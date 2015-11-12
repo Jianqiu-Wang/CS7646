@@ -22,7 +22,7 @@ class KNNLearner():
 
 
 if __name__ == '__main__':
-    data = np.genfromtxt('Data/ripple.csv', delimiter=',')
+    data = np.genfromtxt('Data/simple.csv', delimiter=',')
     train_len = int(data.shape[0] * .6)
 
     train_data = data[:train_len, :]

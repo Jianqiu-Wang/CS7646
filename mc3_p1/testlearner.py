@@ -7,7 +7,7 @@ import math
 import LinRegLearner as lrl
 
 if __name__=="__main__":
-    inf = open('Data/ripple.csv')
+    inf = open('Data/simple.csv')
     data = np.array([map(float,s.strip().split(',')) for s in inf.readlines()])
 
     # compute how much of the data is training and testing
