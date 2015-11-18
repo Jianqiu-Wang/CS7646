@@ -18,9 +18,11 @@ class LinRegLearner(object):
         # slap on 1s column so linear regression finds a constant term
         newdataX = np.ones([dataX.shape[0], dataX.shape[1]+1])
         newdataX[:, 0:dataX.shape[1]] = dataX
+        #print newdataX
 
         # build and save the model
         self.model_coefs, residuals, rank, s = np.linalg.lstsq(newdataX, dataY)
+        #print self.model_coefs
         
     def query(self, points):
         """

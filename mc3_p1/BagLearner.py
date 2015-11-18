@@ -26,7 +26,8 @@ class BagLearner():
     def query(self, Xtest):
 
         learners = []
-        bag_size = math.floor(self.Xtrain.shape[0] * .6)
+        #bag_size = math.floor(self.Xtrain.shape[0] * .6)
+        bag_size = self.Xtrain.shape[0]
         Xtrain = np.zeros((bag_size, 2), dtype='float')
         Ytrain = np.zeros((bag_size, ), dtype='float')
         for i in range(self.bags):
@@ -49,7 +50,8 @@ class BagLearner():
 
             learner.addEvidence(Xtrain, Ytrain)
             learners.append(learner.query(Xtest))
-        return sum(learners)/len(learners)
+        result = sum(learners)/len(learners)
+        return [float(i) for i in result]
 
         #means = 0
         #for i in learners:
@@ -59,7 +61,7 @@ class BagLearner():
 
 
 if __name__ == "__main__":
-    data = np.genfromtxt('Data/simple.csv', delimiter=',')
+    data = np.genfromtxt('best4KNN.csv', delimiter=',')
     train_len = math.floor(data.shape[0] * .6)
 
     train_data = data[:train_len, :]
@@ -68,16 +70,49 @@ if __name__ == "__main__":
     Xtrain = train_data[:, :2]
     Ytrain = train_data[:, 2]
     Xtest = test_data[:, :2]
-
-    #print Ytrain
-    #print Xtest.shape
+    Ytest = test_data[:, 2]
 
     learner = BagLearner(learner=knn.KNNLearner, kwargs={'k': 3}, bags=20, boost=False)
     learner.addEvidence(Xtrain, Ytrain)
-    Y = learner.query(Xtest)
+    #predY = learner.query(Xtest)
+
+    predY = learner.query(Xtrain) # get the predictions
+    rmse = math.sqrt(((Ytrain - predY) ** 2).sum()/Ytrain.shape[0])
+    print
+    print 'KNN'
+    print "In sample results"
+    print "RMSE: ", rmse
+    c = np.corrcoef(predY, y=Ytrain)
+    print "corr: ", c[0, 1]
+
+    predY = learner.query(Xtest) # get the predictions
+    rmse = math.sqrt(((Ytest - predY) ** 2).sum()/Ytest.shape[0])
+    print
+    print "Out of sample results"
+    print "RMSE: ", rmse
+    c = np.corrcoef(predY, y=Ytest)
+    print "corr: ", c[0, 1]
+
 
     learner = BagLearner(learner=lr.LinRegLearner, bags=20, boost=False)
     learner.addEvidence(Xtrain, Ytrain)
-    Y = learner.query(Xtest)
+    #Y = learner.query(Xtest)
+    # evaluate in sample
+    predY = learner.query(Xtrain) # get the predictions
+    rmse = math.sqrt(((Ytrain - predY) ** 2).sum()/Ytrain.shape[0])
+    print
+    print 'RegLearner'
+    print "In sample results"
+    print "RMSE: ", rmse
+    c = np.corrcoef(predY, y=Ytrain)
+    print "corr: ", c[0,1]
 
-    #print Y
+    # evaluate out of sample
+    predY = learner.query(Xtest) # get the predictions
+    rmse = math.sqrt(((Ytest - predY) ** 2).sum()/Ytest.shape[0])
+    print
+    print "Out of sample results"
+    print "RMSE: ", rmse
+    c = np.corrcoef(predY, y=Ytest)
+    print "corr: ", c[0,1]
+

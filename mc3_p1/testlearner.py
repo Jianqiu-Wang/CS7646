@@ -8,7 +8,7 @@ import LinRegLearner as lrl
 
 if __name__=="__main__":
     inf = open('Data/simple.csv')
-    data = np.array([map(float,s.strip().split(',')) for s in inf.readlines()])
+    data = np.array([map(float, s.strip().split(',')) for s in inf.readlines()])
 
     # compute how much of the data is training and testing
     train_rows = math.floor(0.6* data.shape[0])
@@ -17,6 +17,7 @@ if __name__=="__main__":
     # separate out training and testing data
     trainX = data[:train_rows,0:-1]
     trainY = data[:train_rows,-1]
+    #print trainY
     testX = data[train_rows:,0:-1]
     testY = data[train_rows:,-1]
 
@@ -26,6 +27,7 @@ if __name__=="__main__":
 
     # evaluate in sample
     predY = learner.query(trainX) # get the predictions
+    #print predY
     rmse = math.sqrt(((trainY - predY) ** 2).sum()/trainY.shape[0])
     print
     print "In sample results"
