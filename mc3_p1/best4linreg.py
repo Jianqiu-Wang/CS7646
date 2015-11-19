@@ -11,8 +11,7 @@ while i < 1000:
 
     x1 = np.random.randint(4, 12)
     x2 = np.random.randint(4, 12)
-    y = 2*x1 + 2*x2
-    #x = 10
+    y = 4*x1 + 5*x2
 
     writer.writerow([x1, x2, y])
     i += 1

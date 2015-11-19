@@ -1,6 +1,7 @@
 __author__ = 'amilkov3'
 
 import numpy as np
+import math
 
 class KNNLearner():
     def __init__(self, k):
@@ -22,7 +23,7 @@ class KNNLearner():
 
 
 if __name__ == '__main__':
-    data = np.genfromtxt('Data/simple.csv', delimiter=',')
+    data = np.genfromtxt('Data/ripple.csv', delimiter=',')
     train_len = int(data.shape[0] * .6)
 
     train_data = data[:train_len, :]
@@ -31,12 +32,29 @@ if __name__ == '__main__':
     Xtrain = train_data[:, :2]
     Ytrain = train_data[:, 2]
     Xtest = test_data[:, :2]
+    Ytest = test_data[:, 2]
 
-    learner = KNNLearner(k=3)
+    learner = KNNLearner(k=2)
     learner.addEvidence(Xtrain, Ytrain)
-    Y = learner.query(Xtest)
 
-    print Y
+    Y = learner.query(Xtrain)
+    predY = [float(x) for x in Y]
+    rmse = math.sqrt(((Ytrain - predY) ** 2).sum()/Ytrain.shape[0])
+    print
+    print 'KNN'
+    print "In sample results"
+    print "RMSE: ", rmse
+    c = np.corrcoef(predY, y=Ytrain)
+    print "corr: ", c[0, 1]
+
+    Y = learner.query(Xtest) # get the predictions
+    predY = [float(x) for x in Y]
+    rmse = math.sqrt(((Ytest - predY) ** 2).sum()/Ytest.shape[0])
+    print
+    print "Out of sample results"
+    print "RMSE: ", rmse
+    c = np.corrcoef(predY, y=Ytest)
+    print "corr: ", c[0, 1]
 
 
 

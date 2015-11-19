@@ -11,8 +11,9 @@ while i < 1000:
 
     x1 = np.random.randint(0, 5)
     x2 = np.random.randint(0, 5)
+    noise = np.random.randint(0, 10)
 
-    y = x1**2 + 2*x2
+    y = x1**3 + x2**4 + noise
 
     writer.writerow([x1, x2, y])
     i += 1

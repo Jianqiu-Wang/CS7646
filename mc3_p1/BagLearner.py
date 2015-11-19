@@ -43,10 +43,6 @@ class BagLearner():
                 Xtrain[j] = self.Xtrain[i, :]
                 Ytrain[j] = self.Ytrain[i]
                 j += 1
-            #Xtrain = [self.Xtrain[i, :] for i in rand_indexes]
-
-            #print Xtrain
-            #print Ytrain
 
             learner.addEvidence(Xtrain, Ytrain)
             learners.append(learner.query(Xtest))
@@ -74,9 +70,9 @@ if __name__ == "__main__":
 
     learner = BagLearner(learner=knn.KNNLearner, kwargs={'k': 3}, bags=20, boost=False)
     learner.addEvidence(Xtrain, Ytrain)
-    #predY = learner.query(Xtest)
 
     predY = learner.query(Xtrain) # get the predictions
+
     rmse = math.sqrt(((Ytrain - predY) ** 2).sum()/Ytrain.shape[0])
     print
     print 'KNN'
@@ -93,10 +89,9 @@ if __name__ == "__main__":
     c = np.corrcoef(predY, y=Ytest)
     print "corr: ", c[0, 1]
 
-
     learner = BagLearner(learner=lr.LinRegLearner, bags=20, boost=False)
     learner.addEvidence(Xtrain, Ytrain)
-    #Y = learner.query(Xtest)
+
     # evaluate in sample
     predY = learner.query(Xtrain) # get the predictions
     rmse = math.sqrt(((Ytrain - predY) ** 2).sum()/Ytrain.shape[0])
@@ -105,7 +100,7 @@ if __name__ == "__main__":
     print "In sample results"
     print "RMSE: ", rmse
     c = np.corrcoef(predY, y=Ytrain)
-    print "corr: ", c[0,1]
+    print "corr: ", c[0, 1]
 
     # evaluate out of sample
     predY = learner.query(Xtest) # get the predictions
@@ -114,5 +109,5 @@ if __name__ == "__main__":
     print "Out of sample results"
     print "RMSE: ", rmse
     c = np.corrcoef(predY, y=Ytest)
-    print "corr: ", c[0,1]
+    print "corr: ", c[0, 1]
 
