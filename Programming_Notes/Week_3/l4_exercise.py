@@ -9,7 +9,7 @@ def plot_selected(df, columns, start_index, end_index):
     df = df.ix[start_index:end_index, columns]
     plot_data(df)
 
-def symbol_to_path(symbol, base_dir="../data"):
+def symbol_to_path(symbol, base_dir="../../data"):
     """Return CSV file path given ticker symbol."""
     return os.path.join(base_dir, "{}.csv".format(str(symbol)))
 
@@ -64,6 +64,7 @@ def get_bollinger_bands(rm, rstd):
     return upper_band, lower_band
 
 def compute_daily_returns(df):
+    #print df
     daily_returns = df.copy()
     daily_returns[1:] = (df[1:]/df[:-1].values) - 1
     daily_returns.ix[0, :] = 0 #set daily returns for row 0 to 0
@@ -85,6 +86,9 @@ def test_run():
 
     df = get_data(symbols, dates)
 
+    print df
+    compute_daily_returns(df)
+
     #print df.std()
     #print df.mean()
     #print df.median()
@@ -92,6 +96,7 @@ def test_run():
     # Compute Bollinger Bands
     # 1. Compute rolling mean
     rm_SPY = get_rolling_mean(df['SPY'], window=20)
+
 
     # 2. Compute rolling standard deviation
     rstd_SPY = get_rolling_std(df['SPY'], window=20)
