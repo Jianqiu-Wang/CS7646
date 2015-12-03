@@ -37,6 +37,8 @@ if __name__ == '__main__':
     learner = KNNLearner(k=2)
     learner.addEvidence(Xtrain, Ytrain)
 
+    print Ytrain
+
     Y = learner.query(Xtrain)
     predY = [float(x) for x in Y]
     rmse = math.sqrt(((Ytrain - predY) ** 2).sum()/Ytrain.shape[0])
